@@ -4,7 +4,7 @@ interface Configuration {
 }
 
 interface ConfigArgs {
-  FRONTEND_URL: string,
+  FRONTEND_URL: string;
   DB: {
     HOST: string;
     PORT: string;
@@ -36,7 +36,7 @@ const production: ConfigArgs = {
     PASSWORD: process.env.DB_PASSWORD,
   },
   APP: {
-    PORT: Number(process.env.APP_PORT) || 3000,
+    PORT: Number(process.env.APP_PORT) || 8080,
   },
   JWT: {
     SECRET: process.env.JWT_SECRET,
@@ -47,7 +47,6 @@ const production: ConfigArgs = {
       CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     },
   },
-
 };
 
 const development: ConfigArgs = {
@@ -60,10 +59,16 @@ const development: ConfigArgs = {
     PASSWORD: process.env.DEV_DB_PASSWORD,
   },
   APP: {
-    PORT: Number(process.env.DEV_APP_PORT) || 3000,
+    PORT: Number(process.env.DEV_APP_PORT) || 8080,
   },
   JWT: {
     SECRET: process.env.DEV_JWT_SECRET,
+  },
+  AUTH0: {
+    GOOGLE: {
+      CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+      CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+    },
   },
 };
 

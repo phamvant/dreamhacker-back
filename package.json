@@ -8,8 +8,8 @@
   "author": "phamvant",
   "license": "MIT",
   "scripts": {
-    // "build": "tsc",
-    "start:dev": "tsx watch --env-file=.env src/index.ts"
+    "build": "tsc",
+    "dev": "tsx watch --env-file=.local.env src/index.ts"
   },
   "dependencies": {
     "@types/cookie-session": "^2.0.49",
@@ -20,7 +20,7 @@
     "express": "^4.19.2",
     "express-oauth2-jwt-bearer": "^1.6.0",
     "helmet": "^7.1.0",
-    "passport": "^0.7.0",
+    "passport": "0.6",
     "passport-google-oauth20": "^2.0.0"
   },
   "devDependencies": {

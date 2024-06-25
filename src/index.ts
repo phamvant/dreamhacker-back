@@ -5,11 +5,10 @@ import morgan from "morgan";
 import cors from "cors";
 
 import cookieSession from "cookie-session";
-import passport from "passport";
-
 import publicApp from "./public.js";
 import adminApp from "./admin.js";
-import authRoute from "./routes/auth/index.js"
+import authRoute from "./routes/auth/index.js";
+import passport from "./middleware/passport.js";
 
 const app = express();
 
@@ -24,16 +23,32 @@ app.use(
   }),
 );
 
+app.use(function (request, response, next) {
+  if (request.session && !request.session.regenerate) {
+    request.session.regenerate = (cb) => {
+      cb();
+    };
+  }
+  if (request.session && !request.session.save) {
+    request.session.save = (cb) => {
+      cb();
+    };
+  }
+  next();
+});
+
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(cors({
-  origin: CONFIG.FRONTEND_URL,
-  methods: "GET, POST, PUT, DELETE",
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: CONFIG.FRONTEND_URL,
+    methods: "GET, POST, PUT, DELETE",
+    credentials: true,
+  }),
+);
 
-app.use(authRoute);
+app.use("/auth/", authRoute);
 app.use(adminApp);
 app.use(publicApp);
 

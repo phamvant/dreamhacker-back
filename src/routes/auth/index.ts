@@ -4,26 +4,41 @@ import CONFIG from "../../config/config.js";
 
 const router = Router();
 
-router.get("/login/failed", (req: Request, res: Response, next: NextFunction) => {
-  if (req.user) {
-    res.status(200).json({
-      success: true,
-      message: "successful",
-      user: req.user,
-    })
-  }
-});
-
-router.get("/google",
-  passport.authenticate("google", { scope: ["profile"] }))
-
-router.get("/google/callback",
-  passport.authenticate("google",
-    {
-      successRedirect: CONFIG.FRONTEND_URL,
-      failureRedirect: "/login/failed",
+router.get(
+  "/login/failed",
+  (req: Request, res: Response, next: NextFunction) => {
+    if (req.user) {
+      res.status(200).json({
+        success: true,
+        message: "successful",
+        user: req.user,
+      });
     }
-  )
-)
+  },
+);
+
+router.get(
+  "/login/success",
+  (req: Request, res: Response, next: NextFunction) => {
+    console.log(req.user);
+    if (req.user) {
+      res.status(200).json({
+        success: true,
+        message: "successful",
+        user: req.user,
+      });
+    }
+  },
+);
+
+router.get("/google", passport.authenticate("google", { scope: ["profile"] }));
+
+router.get(
+  "/google/callback",
+  passport.authenticate("google", {
+    successRedirect: CONFIG.FRONTEND_URL,
+    failureRedirect: "/login/failed",
+  }),
+);
 
 export default router;
