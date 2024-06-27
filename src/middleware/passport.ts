@@ -3,7 +3,9 @@ import GoogleStrategy from "passport-google-oauth20";
 
 import CONFIG from "../config/config.js";
 
-passport.use(
+const myPassport = new passport.Passport();
+
+myPassport.use(
   new GoogleStrategy.Strategy(
     {
       clientID: CONFIG.AUTH0.GOOGLE.CLIENT_ID,
@@ -17,12 +19,12 @@ passport.use(
   ),
 );
 
-passport.serializeUser((user, done) => {
+myPassport.serializeUser((user, done) => {
   done(null, user);
 });
 
-passport.deserializeUser((user, done) => {
+myPassport.deserializeUser((user, done) => {
   done(null, user);
 });
 
-export default passport;
+export default myPassport;

@@ -8,7 +8,7 @@ import cookieSession from "cookie-session";
 import publicApp from "./public.js";
 import adminApp from "./admin.js";
 import authRoute from "./routes/auth/index.js";
-import passport from "./middleware/passport.js";
+import myPassport from "./middleware/passport.js";
 
 const app = express();
 
@@ -23,22 +23,26 @@ app.use(
   }),
 );
 
+// For fixing library bug
 app.use(function (request, response, next) {
   if (request.session && !request.session.regenerate) {
-    request.session.regenerate = (cb) => {
+    request.session.regenerate = (cb: any) => {
       cb();
     };
   }
   if (request.session && !request.session.save) {
-    request.session.save = (cb) => {
+    request.session.save = (cb: any) => {
       cb();
     };
   }
   next();
 });
 
-app.use(passport.initialize());
-app.use(passport.session());
+// This sets req._passport
+app.use(myPassport.initialize());
+
+// Read session from request and assign to request object
+app.use(myPassport.session());
 
 app.use(
   cors({
