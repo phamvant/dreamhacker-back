@@ -1,11 +1,11 @@
 import passport from "passport";
 import GoogleStrategy from "passport-google-oauth20";
+import { Express } from "express";
 
 import CONFIG from "../config/config.js";
+import { serialize } from "v8";
 
-const myPassport = new passport.Passport();
-
-myPassport.use(
+passport.use(
   new GoogleStrategy.Strategy(
     {
       clientID: CONFIG.AUTH0.GOOGLE.CLIENT_ID,
@@ -19,12 +19,24 @@ myPassport.use(
   ),
 );
 
-myPassport.serializeUser((user, done) => {
-  done(null, user);
+passport.serializeUser((user, done) => {
+  console.log("serialize");
+  console.log(user);
+  process.nextTick(function () {
+    done(null, user.id);
+  });
 });
 
-myPassport.deserializeUser((user, done) => {
-  done(null, user);
+passport.deserializeUser((id, done) => {
+  console.log("deserial");
+  console.log(id);
+  process.nextTick(function () {
+    if (id) {
+      done(null, { id: id as string });
+    } else {
+      done(null, null);
+    }
+  });
 });
 
-export default myPassport;
+export default passport;

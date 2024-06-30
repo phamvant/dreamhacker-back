@@ -1,5 +1,7 @@
 import pg from "pg";
 import config from "../config/config.js";
+import fs from "fs/promises";
+import { title } from "process";
 
 const postgresSingleton = () => {
   return new pg.Pool({
@@ -24,4 +26,4 @@ postgres.on("error", (err) => {
 
 export default postgres;
 
-// TODO db in dev mode
+if (process.env.NODE_ENV !== "production") globalThis.postgres = postgres;

@@ -3,38 +3,41 @@ import express from "express";
 import helmet from "helmet";
 import morgan from "morgan";
 import cors from "cors";
+import csrf from "csurf";
 
-import cookieSession from "cookie-session";
 import publicApp from "./public.js";
 import adminApp from "./admin.js";
-import authRoute from "./routes/auth/index.js";
+import authRoute from "./route/auth/index.js";
 import myPassport from "./middleware/passport.js";
+import session from "express-session";
+import pgSession from "connect-pg-simple";
+import postgres from "./db/db.js";
 
 const app = express();
 
 app.use(helmet());
 app.use(morgan("short"));
 
+const pgStore = pgSession(session);
+
 app.use(
-  cookieSession({
-    name: "session",
-    keys: ["dreamhacker"],
-    maxAge: 24 * 60 * 60 * 100,
+  session({
+    secret: "thuan",
+    saveUninitialized: false,
+    resave: false,
+    cookie: {
+      maxAge: 60000 * 60,
+    },
+    store: new pgStore({
+      pool: postgres,
+    }),
   }),
 );
 
-// For fixing library bug
-app.use(function (request, response, next) {
-  if (request.session && !request.session.regenerate) {
-    request.session.regenerate = (cb: any) => {
-      cb();
-    };
-  }
-  if (request.session && !request.session.save) {
-    request.session.save = (cb: any) => {
-      cb();
-    };
-  }
+app.use(csrf());
+
+app.use(function (req, res, next) {
+  res.locals.csrfToken = req.csrfToken();
   next();
 });
 

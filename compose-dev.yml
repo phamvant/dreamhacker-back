@@ -12,7 +12,12 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./database/schema/user.init.sql:/docker-entrypoint-initdb.d/user.init.sql
+      - ./database/schema/user.init.sql:/docker-entrypoint-initdb.d/001.user.init.sql
+      - ./database/schema/session.init.sql:/docker-entrypoint-initdb.d/002.session.init.sql
+      - ./database/schema/program.init.sql:/docker-entrypoint-initdb.d/003.program.init.sql
+      - ./database/schema/category.init.sql:/docker-entrypoint-initdb.d/004.category.init.sql
+      - ./database/schema/post.init.sql:/docker-entrypoint-initdb.d/005.post.init.sql
+
     networks:
       - postgres_network
 

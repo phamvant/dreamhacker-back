@@ -24,6 +24,11 @@ interface ConfigArgs {
       CLIENT_SECRET: string;
     };
   };
+  AWS?: {
+    ACCESS_KEY_ID: string;
+    SECRET_ACCESS_KEY: string;
+    REGION: string;
+  };
 }
 
 const production: ConfigArgs = {
@@ -47,6 +52,11 @@ const production: ConfigArgs = {
       CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     },
   },
+  AWS: {
+    ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
+    SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
+    REGION: process.env.AWS_REGION,
+  },
 };
 
 const development: ConfigArgs = {
@@ -69,6 +79,11 @@ const development: ConfigArgs = {
       CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
       CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     },
+  },
+  AWS: {
+    ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
+    SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
+    REGION: process.env.AWS_REGION,
   },
 };
 

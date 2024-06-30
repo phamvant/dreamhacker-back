@@ -1,5 +1,5 @@
 import express from "express";
-import publicIndexRouteV1 from "./routes/pubic/public.index.js";
+import publicIndexRouteV1 from "./route/pubic/public.index.js";
 
 const publicApp = express();
 

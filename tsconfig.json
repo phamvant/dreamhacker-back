@@ -6,8 +6,8 @@
     "sourceMap": true, //map the compiled code back to the original code (JS) for debugging purposes
     // "outDir": "dist",
     "esModuleInterop": true,
+    "typeRoots": ["./typings", "./node_modules/@types"]
+    // "skipLibCheck": true
   },
-  "include": [
-    "src/**/*"
-  ]
+  "include": ["src/**/*", "typings/**/*.d.ts"]
 }
