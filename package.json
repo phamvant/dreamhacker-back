@@ -36,6 +36,7 @@
     "@types/passport": "^1.0.16",
     "@types/passport-google-oauth20": "^2.0.16",
     "@types/pg": "^8.11.6",
+    "cheerio": "^1.0.0-rc.12",
     "morgan": "^1.10.0",
     "tsx": "^4.15.5",
     "typescript": "^5.4.5"

@@ -1,15 +1,3 @@
-CREATE TABLE IF NOT EXISTS public.post (
-	id serial PRIMARY KEY,
-	title TEXT NOT NULL,
-	link TEXT,
-	category_id INTEGER NOT NULL,
-	is_scrap BOOLEAN DEFAULT TRUE
-);
-
-ALTER TABLE "post"
-ADD CONSTRAINT "category_program_fk" FOREIGN KEY (category_id) REFERENCES public.category (id);
-
-
 CREATE OR REPLACE FUNCTION increment_post_count() RETURNS TRIGGER AS $$
 BEGIN
     UPDATE category SET total_post = total_post + 1 WHERE id=NEW.category_id;

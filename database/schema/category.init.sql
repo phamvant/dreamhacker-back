@@ -1,7 +1,8 @@
 CREATE TABLE IF NOT EXISTS public.category (
 	id serial PRIMARY KEY,
 	name TEXT NOT NULL,
-	program_id INTEGER NOT NULL
+	program_id INTEGER NOT NULL,
+	total_post INTEGER DEFAULT 0
 );
 
 ALTER TABLE "category"
