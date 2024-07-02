@@ -1,35 +1,14 @@
-import { Router, Request, Response, NextFunction } from "express";
+import { Router } from "express";
+import { asyncHandler } from "../../../utils/async.handler.js";
 import {
-  getListPostByCategory,
-  getPostById,
-} from "../../../service/post/post.service.js";
+  getListPostController,
+  getPostByIdController,
+} from "../../../controller/public/post.controller.js";
 
 const router = Router();
 
-router.get("/list", async (req: Request, res: Response, next: NextFunction) => {
-  const categoryId = parseInt(req.query.category as string);
-  const page = parseInt(req.query.page as string);
+router.get("/list", asyncHandler(getListPostController));
 
-  console.log(categoryId, page);
-
-  if (!categoryId || !page) {
-    res.status(400).send();
-  }
-
-  const ret = await getListPostByCategory(categoryId, page);
-
-  if (!ret) {
-    res.status(400).send();
-  }
-
-  res.status(200).send(ret);
-});
-
-router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
-  const id = req.params.id;
-  const postHTML = await getPostById(Number(id));
-  res.write(postHTML);
-  res.status(200).send();
-});
+router.get("/:id", asyncHandler(getPostByIdController));
 
 export default router;

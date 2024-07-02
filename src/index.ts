@@ -12,6 +12,8 @@ import myPassport from "./middleware/passport.js";
 import session from "express-session";
 import pgSession from "connect-pg-simple";
 import postgres from "./db/db.js";
+import { ErrorResponse, NotFoundError } from "./utils/error.response.js";
+import { StatusCode } from "./utils/http.response/code.status.js";
 
 const app = express();
 
@@ -31,7 +33,7 @@ app.use(
     store: new pgStore({
       pool: postgres,
     }),
-  })
+  }),
 );
 
 app.use(csrf());
@@ -40,6 +42,8 @@ app.use(function (req, res, next) {
   res.locals.csrfToken = req.csrfToken();
   next();
 });
+
+app.use(express.json()); // parse incoming request with JSON payload
 
 // This sets req._passport
 app.use(myPassport.initialize());
@@ -52,14 +56,36 @@ app.use(
     origin: CONFIG.FRONTEND_URL,
     methods: "GET, POST, PUT, DELETE",
     credentials: true,
-  })
+  }),
 );
 
 app.use("/auth/", authRoute);
+
 app.use(adminApp);
 app.use(publicApp);
 
 // TODO setup product
+
+app.use(
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const error = new NotFoundError({ message: "Not found" });
+    next(error);
+  },
+);
+
+app.use(
+  (
+    error: ErrorResponse,
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction,
+  ) => {
+    res
+      .status(error.code || StatusCode.INTERNAL_SERVER_ERROR)
+      .json({ status: "error", message: error.message })
+      .send();
+  },
+);
 
 const server = app.listen(CONFIG.APP.PORT, () => {
   console.log(`Listening on port ${CONFIG.APP.PORT}...`);

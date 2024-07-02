@@ -1,6 +1,8 @@
-import { Router, Request, Response, NextFunction } from "express";
+import { Router } from "express";
 import passport from "passport";
 import CONFIG from "../../config/config.js";
+import { asyncHandler } from "../../utils/async.handler.js";
+import { logoutController } from "../../controller/auth/auth.controller.js";
 
 const router = Router();
 
@@ -14,20 +16,6 @@ router.get(
   }),
 );
 
-router.get("/logout", (req: Request, res: Response, next: NextFunction) => {
-  if (!req.user) {
-    res.status(401).send();
-  }
-
-  req.logout((err) => {
-    if (err) {
-      res.redirect(CONFIG.FRONTEND_URL);
-      return res.status(400).send();
-    }
-
-    res.redirect(CONFIG.FRONTEND_URL);
-    res.status(200).send();
-  });
-});
+router.get("/logout", asyncHandler(logoutController));
 
 export default router;

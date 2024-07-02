@@ -6,7 +6,6 @@ const publicApp = express();
 /**
  * Middle ware
  */
-publicApp.use(express.json()); // parse incoming request with JSON payload
 
 // DOC_EXPRESS
 // Can use to serve static file like API document with Swagger, assets for a CMS

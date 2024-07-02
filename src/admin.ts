@@ -6,8 +6,6 @@ const adminApp = express();
 /**
  * Middle ware
  */
-adminApp.use(express.json()); // parse incoming request with JSON payload
-
 // DOC_EXPRESS
 // Can use to serve static file like API document with Swagger, assets for a CMS
 // adminApp.use("/docs", express.static(path.join(__dirname, "docs")));
