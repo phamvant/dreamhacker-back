@@ -31,7 +31,7 @@ app.use(
     store: new pgStore({
       pool: postgres,
     }),
-  }),
+  })
 );
 
 app.use(csrf());
@@ -52,7 +52,7 @@ app.use(
     origin: CONFIG.FRONTEND_URL,
     methods: "GET, POST, PUT, DELETE",
     credentials: true,
-  }),
+  })
 );
 
 app.use("/auth/", authRoute);

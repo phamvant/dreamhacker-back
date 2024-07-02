@@ -3,14 +3,6 @@ import config from "../config/config.js";
 
 const postgresSingleton = () => {
   return new pg.Pool({
-    host: "localhost",
-    port: 5432,
-    database: "dreamhacker",
-    user: "dreamhacker-admin",
-    password: "thuan286",
-    query_timeout: 2000,
-  });
-  return new pg.Pool({
     host: config.DB.HOST,
     port: config.DB.PORT,
     database: config.DB.NAME,
