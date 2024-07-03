@@ -5,7 +5,7 @@ export class SUCCESS {
   code: number;
   metadata: any;
 
-  constructor({ code = StatusCode.OK, metadata = undefined } = undefined) {
+  constructor({ code = StatusCode.OK, metadata = undefined } = {}) {
     this.code = code;
     this.metadata = metadata || "";
   }

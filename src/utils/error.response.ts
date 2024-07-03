@@ -3,7 +3,7 @@ import { StatusCode } from "./http.response/code.status.js";
 export class ErrorResponse extends Error {
   statusCode: number;
 
-  constructor({ statusCode = StatusCode.INTERNAL_SERVER_ERROR, message }) {
+  constructor({ statusCode = StatusCode.INTERNAL_SERVER_ERROR, message = "" }) {
     super(message);
     this.statusCode = statusCode;
   }

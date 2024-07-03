@@ -1,5 +1,4 @@
 node_modules
-contents
 .local.env
-test.ts
-dist
+.example.env
+test

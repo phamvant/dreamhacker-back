@@ -32,7 +32,7 @@ interface ConfigArgs {
 }
 
 const production: ConfigArgs = {
-  FRONTEND_URL: process.env.FRONTEND_URL_DEV,
+  FRONTEND_URL: process.env.FRONTEND_URL,
   DB: {
     HOST: process.env.DB_HOST,
     PORT: Number(process.env.DB_PORT),
@@ -60,7 +60,7 @@ const production: ConfigArgs = {
 };
 
 const development: ConfigArgs = {
-  FRONTEND_URL: process.env.FRONTEND_URL_PRO,
+  FRONTEND_URL: process.env.FRONTEND_URL_DEV,
   DB: {
     HOST: process.env.DEV_DB_HOST || "localhost",
     PORT: Number(process.env.DEV_DB_PORT) || 5432,

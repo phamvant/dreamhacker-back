@@ -4,10 +4,10 @@
     "moduleResolution": "NodeNext",
     "target": "ES2022",
     "sourceMap": true, //map the compiled code back to the original code (JS) for debugging purposes
-    // "outDir": "dist",
+    "outDir": "dist",
     "esModuleInterop": true,
-    "typeRoots": ["./typings", "./node_modules/@types"]
-    // "skipLibCheck": true
+    "typeRoots": ["./typings", "./node_modules/@types"],
+    "skipLibCheck": true
   },
   "include": ["src/**/*", "typings/**/*.d.ts"]
 }
