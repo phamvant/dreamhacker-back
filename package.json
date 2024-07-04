@@ -20,6 +20,7 @@
     "express-oauth2-jwt-bearer": "^1.6.0",
     "express-session": "^1.18.0",
     "helmet": "^7.1.0",
+    "morgan": "^1.10.0",
     "passport": "0.6",
     "passport-google-oauth20": "^2.0.0",
     "pg": "^8.12.0"
@@ -37,7 +38,6 @@
     "@types/passport-google-oauth20": "^2.0.16",
     "@types/pg": "^8.11.6",
     "cheerio": "^1.0.0-rc.12",
-    "morgan": "^1.10.0",
     "tsx": "^4.15.5",
     "typescript": "^5.4.5"
   }
