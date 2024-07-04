@@ -9,6 +9,7 @@ const postgresSingleton = () => {
     user: config.DB.USER,
     password: config.DB.PASSWORD,
     query_timeout: 2000,
+    ssl: true,
   });
 };
 
