@@ -9,7 +9,9 @@ const postgresSingleton = () => {
     user: config.DB.USER,
     password: config.DB.PASSWORD,
     query_timeout: 2000,
-    ssl: true,
+    ssl: {
+      ca: "/etc/ssl/certs/rds-combined-ca-bundle.pem",
+    },
   });
 };
 
