@@ -4,6 +4,7 @@ interface Configuration {
 }
 
 interface ConfigArgs {
+  ENV: string;
   FRONTEND_URL: string;
   DB: {
     HOST: string;
@@ -32,6 +33,7 @@ interface ConfigArgs {
 }
 
 const production: ConfigArgs = {
+  ENV: "production",
   FRONTEND_URL: process.env.FRONTEND_URL,
   DB: {
     HOST: process.env.DB_HOST,
@@ -60,6 +62,7 @@ const production: ConfigArgs = {
 };
 
 const development: ConfigArgs = {
+  ENV: "development",
   FRONTEND_URL: process.env.FRONTEND_URL_DEV,
   DB: {
     HOST: process.env.DEV_DB_HOST || "localhost",
@@ -96,7 +99,5 @@ if (!configuration[env]) {
   );
   env = "development";
 }
-
-console.log(configuration[env]);
 
 export default configuration[env];

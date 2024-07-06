@@ -10,9 +10,12 @@ const postgresSingleton = () => {
     user: config.DB.USER,
     password: config.DB.PASSWORD,
     query_timeout: 2000,
-    ssl: {
-      ca: fs.readFileSync("./cert/rds-combined-ca-bundle.pem"),
-    },
+    ssl:
+      config.ENV === "production"
+        ? {
+            ca: fs.readFileSync("./cert/rds-combined-ca-bundle.pem"),
+          }
+        : false,
   });
 };
 
