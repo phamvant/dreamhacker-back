@@ -20,6 +20,11 @@ const app = express();
 app.use(helmet());
 app.use(morgan("short"));
 
+app.get("/", async () => {
+  const db = await postgres.query(`select * from session`);
+  console.log(db.rows[0]);
+});
+
 const pgStore = pgSession(session);
 
 app.use(
@@ -33,7 +38,7 @@ app.use(
     store: new pgStore({
       pool: postgres,
     }),
-  })
+  }),
 );
 
 app.use(csrf());
@@ -56,7 +61,7 @@ app.use(
     origin: CONFIG.FRONTEND_URL,
     methods: "GET, POST, PUT, DELETE",
     credentials: true,
-  })
+  }),
 );
 
 app.use("/auth/", authRoute);
@@ -70,7 +75,7 @@ app.use(
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const error = new NotFoundError({ message: "Not found" });
     next(error);
-  }
+  },
 );
 
 app.use(
@@ -78,14 +83,14 @@ app.use(
     error: ErrorResponse,
     req: express.Request,
     res: express.Response,
-    next: express.NextFunction
+    next: express.NextFunction,
   ) => {
     console.log("Error", error);
     res
       .status(error.statusCode || StatusCode.INTERNAL_SERVER_ERROR)
       .json({ status: "error", message: error.message })
       .send();
-  }
+  },
 );
 
 const server = app.listen(CONFIG.APP.PORT, () => {

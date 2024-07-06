@@ -13,10 +13,10 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-CREATE TRIGGER increment_post_count_trigger
+CREATE OR REPLACE TRIGGER increment_post_count_trigger
 AFTER INSERT ON post
 FOR EACH ROW EXECUTE FUNCTION increment_post_count();
 
-CREATE TRIGGER decrement_post_count_trigger
+CREATE OR REPLACE TRIGGER decrement_post_count_trigger
 AFTER DELETE ON post
 FOR EACH ROW EXECUTE FUNCTION decrement_post_count();

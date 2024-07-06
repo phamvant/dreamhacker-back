@@ -12,11 +12,12 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./database/schema/user.init.sql:/docker-entrypoint-initdb.d/001.user.init.sql
-      - ./database/schema/session.init.sql:/docker-entrypoint-initdb.d/002.session.init.sql
-      - ./database/schema/program.init.sql:/docker-entrypoint-initdb.d/003.program.init.sql
-      - ./database/schema/category.init.sql:/docker-entrypoint-initdb.d/004.category.init.sql
-      - ./database/schema/post.init.sql:/docker-entrypoint-initdb.d/005.post.init.sql
+      - ./database/schema/01.user.init.sql:/docker-entrypoint-initdb.d/001.user.init.sql
+      - ./database/schema/02.session.init.sql:/docker-entrypoint-initdb.d/002.session.init.sql
+      - ./database/schema/03.program.init.sql:/docker-entrypoint-initdb.d/003.program.init.sql
+      - ./database/schema/04.category.init.sql:/docker-entrypoint-initdb.d/004.category.init.sql
+      - ./database/schema/05.post.init.sql:/docker-entrypoint-initdb.d/005.post.init.sql
+      - ./database/trigger/01.update_total_post.sql:/docker-entrypoint-initdb.d/006.update_total_post.sql
 
     networks:
       - postgres_network

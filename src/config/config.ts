@@ -97,4 +97,6 @@ if (!configuration[env]) {
   env = "development";
 }
 
+console.log(configuration[env]);
+
 export default configuration[env];
