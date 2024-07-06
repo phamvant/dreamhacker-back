@@ -1,5 +1,6 @@
 import pg from "pg";
 import config from "../config/config.js";
+import fs from "fs";
 
 const postgresSingleton = () => {
   return new pg.Pool({
@@ -10,7 +11,7 @@ const postgresSingleton = () => {
     password: config.DB.PASSWORD,
     query_timeout: 2000,
     ssl: {
-      ca: "/etc/ssl/certs/rds-combined-ca-bundle.pem",
+      ca: fs.readFileSync("./cert/rds-combined-ca-bundle.pem"),
     },
   });
 };
