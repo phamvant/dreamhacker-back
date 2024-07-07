@@ -1,14 +1,18 @@
 CREATE TABLE IF NOT EXISTS public.post (
 	id serial PRIMARY KEY,
 	title TEXT NOT NULL,
-	link TEXT,
-	category_id INTEGER NOT NULL,
-	is_scrap BOOLEAN DEFAULT TRUE
+	content TEXT,
+	is_scrap BOOLEAN DEFAULT TRUE,
+	category_id INTEGER,
+	is_published BOOLEAN DEFAULT FALSE,
+	author_id VARCHAR(36)
 );
 
 ALTER TABLE "post"
-ADD CONSTRAINT "category_program_fk" FOREIGN KEY (category_id) REFERENCES public.category (id);
+ADD CONSTRAINT "post_category_fk" FOREIGN KEY (category_id) REFERENCES public.category (id);
 
+ALTER TABLE "post"
+ADD CONSTRAINT "post_user_fk" FOREIGN KEY (author_id) REFERENCES public.user (id);
 
 CREATE OR REPLACE FUNCTION increment_post_count() RETURNS TRIGGER AS $$
 BEGIN

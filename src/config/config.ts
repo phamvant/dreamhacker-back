@@ -68,7 +68,7 @@ const development: ConfigArgs = {
     HOST: process.env.DEV_DB_HOST || "localhost",
     PORT: Number(process.env.DEV_DB_PORT) || 5432,
     NAME: process.env.DEV_DB_NAME || "dreamhacker",
-    USER: process.env.DEV_DB_USER || "dreamhacker-admin",
+    USER: process.env.DEV_DB_USER || "phamvant",
     PASSWORD: process.env.DEV_DB_PASSWORD || "thuan286",
   },
   APP: {

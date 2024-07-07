@@ -7,7 +7,7 @@ import { SUCCESS } from "../../utils/success.response.js";
 export const getListPostController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const categoryId = parseInt(req.query.category as string);
   const page = parseInt(req.query.page as string);
@@ -30,7 +30,7 @@ export const getListPostController = async (
 export const getPostByIdController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const id = req.params.id;
 
@@ -39,4 +39,13 @@ export const getPostByIdController = async (
   res.write(postHTML);
 
   res.status(200).send();
+};
+
+export const createPostController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  console.log(req.body());
+  const { content, user_id, title } = req.body();
 };

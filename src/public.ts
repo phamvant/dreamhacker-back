@@ -1,5 +1,7 @@
 import express from "express";
 import publicIndexRouteV1 from "./route/pubic/public.index.js";
+import { ensureAuthenticated } from "./middleware/auth.js";
+import { asyncHandler } from "./utils/async.handler.js";
 
 const publicApp = express();
 
@@ -21,6 +23,8 @@ const publicApp = express();
 /**
  * Routing
  */
+
+// publicApp.use(asyncHandler(ensureAuthenticated));
 
 publicApp.use("/api/v1", publicIndexRouteV1);
 

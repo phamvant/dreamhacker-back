@@ -1,17 +1,16 @@
 import postgres from "../../db/db.js";
 
 export const getPostPathById = async (id: number) => {
-  const ret = await postgres.query(`SELECT link from public.post WHERE id=$1`, [
-    id,
-  ]);
+  const ret = await postgres.query(
+    `SELECT content, is_scrap from public.post WHERE id=$1`,
+    [id],
+  );
 
   if (!ret.rowCount) {
     return false;
   }
 
-  const postPath = ret.rows[0].link;
-
-  return postPath;
+  return ret;
 };
 
 export const getListPost = async (category: number, page: number) => {
@@ -29,4 +28,20 @@ export const getListPost = async (category: number, page: number) => {
   const posts = ret.rows;
 
   return posts;
+};
+
+export const publish = async (
+  content: string,
+  user_id: string,
+  title: string,
+) => {
+  const ret = await postgres.query(
+    `
+    INSERT INTO post (title, content, is_scrap, category_id, is_published, author_id)
+    VALUES ($1, $2, FALSE, 8, TRUE, $3)
+    `,
+    [title, content, user_id],
+  );
+
+  return ret;
 };

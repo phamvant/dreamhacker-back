@@ -18,18 +18,13 @@ import { StatusCode } from "./utils/http.response/code.status.js";
 const app = express();
 
 app.use(helmet());
-app.use(morgan("short"));
-
-app.get("/", async () => {
-  const db = await postgres.query(`select * from session`);
-  console.log(db.rows[0]);
-});
+app.use(morgan("dev"));
 
 const pgStore = pgSession(session);
 
 app.use(
   session({
-    secret: "thuan",
+    secret: "kalhlnlswv4uatsco4wtoqpt49tow3uon",
     saveUninitialized: false,
     resave: false,
     cookie: {
@@ -85,7 +80,6 @@ app.use(
     res: express.Response,
     next: express.NextFunction,
   ) => {
-    console.log("Error", error);
     res
       .status(error.statusCode || StatusCode.INTERNAL_SERVER_ERROR)
       .json({ status: "error", message: error.message })

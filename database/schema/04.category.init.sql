@@ -9,4 +9,6 @@ ALTER TABLE "category"
 ADD CONSTRAINT "category_program_fk" FOREIGN KEY (program_id) REFERENCES public.program (id);
 
 INSERT INTO public.category (name, program_id) VALUES
-('MBA', 1), ('Essay写作', 1), ('MBA排名', 1), ('MBA面试', 1), ('学校信息', 1),  ('Resume', 1), ('推荐信', 1), ('申请FAQ', 1), ('申请总结', 1), ('申请策略', 1);
+('MBA', 1), ('Essay Writing', 1), ('MBA Rankings', 1), ('MBA Interviews', 1),
+('School Information', 1),  ('Resume', 1), ('Recommendation Letter', 1), ('Application FAQ', 1),
+('Application Summary', 1), ('Application Strategy', 1);

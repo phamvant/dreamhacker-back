@@ -1,9 +1,7 @@
 import passport from "passport";
 import GoogleStrategy from "passport-google-oauth20";
-import { Express } from "express";
 
 import CONFIG from "../config/config.js";
-import { serialize } from "v8";
 
 passport.use(
   new GoogleStrategy.Strategy(

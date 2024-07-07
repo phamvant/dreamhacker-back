@@ -1,21 +1,23 @@
 import { getPostFromPath } from "../../db/files.js";
 import { NotFoundError } from "../../utils/error.response.js";
-import { getListPost, getPostPathById } from "./post.repo.js";
+import { getListPost, getPostPathById, publish } from "./post.repo.js";
 
 export const getPostById = async (id: number) => {
-  const postPath = await getPostPathById(id);
+  const post = await getPostPathById(id);
 
-  if (!postPath) {
+  if (!post) {
     throw new NotFoundError();
   }
 
-  const postBuf = await getPostFromPath(postPath);
+  if (post.rows[0].is_scrap) {
+    const postBuf = await getPostFromPath(post.rows[0].content);
 
-  if (!postBuf) {
-    throw new NotFoundError();
+    if (!postBuf) {
+      throw new NotFoundError();
+    }
+
+    return postBuf;
   }
-
-  return postBuf;
 };
 
 export const getListPostByCategory = async (category: number, page: number) => {
@@ -26,4 +28,12 @@ export const getListPostByCategory = async (category: number, page: number) => {
   }
 
   return listPost;
+};
+
+export const publishPost = async (
+  content: string,
+  user_id: string,
+  title: string,
+) => {
+  const ret = await publish(content, user_id, title);
 };
