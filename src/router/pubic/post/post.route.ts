@@ -13,6 +13,6 @@ router.get("/list", asyncHandler(getListPostController));
 
 router.get("/:id", asyncHandler(getPostByIdController));
 
-router.post("/create", asyncHandler(createPostController));
+router.post("/create", ensureAuthenticated, asyncHandler(createPostController));
 
 export default router;

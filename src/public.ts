@@ -1,5 +1,5 @@
 import express from "express";
-import publicIndexRouteV1 from "./route/pubic/public.index.js";
+import publicIndexRouteV1 from "./router/pubic/public.index.js";
 import { ensureAuthenticated } from "./middleware/auth.js";
 import { asyncHandler } from "./utils/async.handler.js";
 

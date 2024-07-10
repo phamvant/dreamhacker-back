@@ -5,8 +5,9 @@ import { asyncHandler } from "../utils/async.handler.js";
 export const ensureAuthenticated = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     if (req.isAuthenticated()) {
+      console.log(req.user);
       return next();
     }
     throw new UnAuthorizedError();
-  },
+  }
 );

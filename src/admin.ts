@@ -1,5 +1,5 @@
 import express from "express";
-import adminIndexRoute from "./route/admin/admin.index.js";
+import adminIndexRoute from "./router/admin/admin.index.js";
 
 const adminApp = express();
 

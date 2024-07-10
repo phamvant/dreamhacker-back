@@ -7,7 +7,7 @@ import { SUCCESS } from "../../utils/success.response.js";
 export const logoutController = async (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   if (!req.user) {
     throw new UnauthorizedError();
@@ -15,11 +15,9 @@ export const logoutController = async (
 
   req.logout((err) => {
     if (err) {
-      res.redirect(CONFIG.FRONTEND_URL);
       throw new ErrorResponse({});
     }
 
-    res.redirect(CONFIG.FRONTEND_URL);
     new SUCCESS().send(res);
   });
 };
