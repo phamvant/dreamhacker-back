@@ -16,19 +16,19 @@ passport.use(
       try {
         const existedUser = await postgres.query(
           "SELECT * FROM federated_credentials WHERE provider = $1 AND user_id = $2",
-          ["https://www.facebook.com", profile.id]
+          ["https://www.facebook.com", profile.id],
         );
 
         // console.log(profile);
         if (!existedUser.rowCount) {
           const newUser = await postgres.query(
             "INSERT INTO public.user (id, email, username) VALUES ($1, $2, $3)",
-            [profile.id, "thuan@gmail.com", profile.displayName]
+            [profile.id, "thuan@gmail.com", profile.displayName],
           );
 
           const newCredential = await postgres.query(
             "INSERT INTO federated_credentials (user_id, provider) VALUES ($1, $2)",
-            [profile.id, "https://www.facebook.com"]
+            [profile.id, "https://www.facebook.com"],
           );
 
           const user = {
@@ -39,8 +39,8 @@ passport.use(
           return done(null, user);
         } else {
           const user = await postgres.query(
-            "SELECT * FROM users WHERE id = $1",
-            [existedUser.rows[0].user_id]
+            "SELECT * FROM public.user WHERE id = $1",
+            [existedUser.rows[0].user_id],
           );
 
           if (!user.rowCount) {
@@ -52,8 +52,8 @@ passport.use(
       } catch (error) {
         return done(error);
       }
-    }
-  )
+    },
+  ),
 );
 
 passport.serializeUser((user, done) => {

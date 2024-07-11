@@ -1,22 +1,16 @@
 import { getPostFromPath } from "../../db/files.js";
 import { NotFoundError } from "../../utils/error.response.js";
-import { getListPost, getPostPathById, save } from "./post.repo.js";
+import { getDbPostById, getListPost, save } from "./post.repo.js";
 
 export const getPostById = async (id: number) => {
-  const post = await getPostPathById(id);
+  const post = await getDbPostById(id);
 
   if (!post) {
     throw new NotFoundError();
   }
 
-  if (post.rows[0].is_scrap) {
-    const postBuf = await getPostFromPath(post.rows[0].content);
-
-    if (!postBuf) {
-      throw new NotFoundError();
-    }
-
-    return postBuf;
+  if (!post.rows[0].is_scrap) {
+    return post.rows[0];
   }
 };
 
@@ -31,9 +25,11 @@ export const getListPostByCategory = async (category: number, page: number) => {
 };
 
 export const savePost = async (
+  title: string,
   content: string,
-  user_id: string,
-  title: string
+  userId: string,
 ) => {
-  const ret = await save(content, user_id, title);
+  const ret = await save(title, content, userId);
+
+  return ret;
 };

@@ -1,16 +1,14 @@
 import { Request, Response, NextFunction } from "express";
-import { UnauthorizedError } from "express-oauth2-jwt-bearer";
-import CONFIG from "../../config/config.js";
 import { ErrorResponse } from "../../utils/error.response.js";
-import { SUCCESS } from "../../utils/success.response.js";
+import config from "../../config/config.js";
 
 export const logoutController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   if (!req.user) {
-    throw new UnauthorizedError();
+    return res.redirect(`${config.FRONTEND_URL}`);
   }
 
   req.logout((err) => {
@@ -18,6 +16,6 @@ export const logoutController = async (
       throw new ErrorResponse({});
     }
 
-    new SUCCESS().send(res);
+    return res.redirect(`${config.FRONTEND_URL}`);
   });
 };
