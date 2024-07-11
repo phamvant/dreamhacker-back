@@ -1,13 +1,16 @@
 import { Request, Response, NextFunction } from "express";
-import { getListPostByCategory } from "../../service/post/post.service.js";
+import {
+  getListPostByCategory,
+  savePost,
+} from "../../service/post/post.service.js";
 import { getPostById } from "../../service/post/post.service.js";
 import { NotFoundError } from "../../utils/error.response.js";
-import { SUCCESS } from "../../utils/success.response.js";
+import { CREATE, SUCCESS } from "../../utils/success.response.js";
 
 export const getListPostController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const categoryId = parseInt(req.query.category as string);
   const page = parseInt(req.query.page as string);
@@ -30,22 +33,26 @@ export const getListPostController = async (
 export const getPostByIdController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const id = req.params.id;
 
-  const postHTML = await getPostById(Number(id));
+  const post = await getPostById(Number(id));
 
-  res.write(postHTML);
+  console.log(post);
 
-  res.status(200).send();
+  new SUCCESS({ metadata: post }).send(res);
 };
 
 export const createPostController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
-  console.log(req.body);
-  // const { content, user_id, title } = req.body();
+  const { id } = req.user as { id: string };
+  const { content, title } = req.body;
+
+  const ret = await savePost(title, content, id);
+
+  new CREATE({}).send(res);
 };

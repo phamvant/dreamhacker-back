@@ -1,9 +1,9 @@
 import postgres from "../../db/db.js";
 
-export const getPostPathById = async (id: number) => {
+export const getDbPostById = async (id: number) => {
   const ret = await postgres.query(
-    `SELECT content, is_scrap from public.post WHERE id=$1`,
-    [id]
+    `SELECT title, content, is_scrap, category_id, author_id from public.post WHERE id=$1`,
+    [id],
   );
 
   if (!ret.rowCount) {
@@ -18,7 +18,7 @@ export const getListPost = async (category: number, page: number) => {
 
   const ret = await postgres.query(
     `SELECT * FROM public.post WHERE category_id=$1 LIMIT $2 OFFSET $3`,
-    [category, pageSize, pageSize * (page - 1)]
+    [category, pageSize, pageSize * (page - 1)],
   );
 
   if (!ret.rowCount) {
@@ -30,14 +30,16 @@ export const getListPost = async (category: number, page: number) => {
   return posts;
 };
 
-export const save = async (content: string, user_id: string, title: string) => {
+export const save = async (title: string, content: string, userId: string) => {
   const ret = await postgres.query(
     `
     INSERT INTO post (title, content, is_scrap, category_id, is_published, author_id)
-    VALUES ($1, $2, FALSE, 8, TRUE, $3)
+    VALUES ($1, $2, FALSE, 1, TRUE, $3)
     `,
-    [title, content, user_id]
+    [title, content, userId],
   );
+
+  console.log(ret);
 
   return ret;
 };

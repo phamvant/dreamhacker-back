@@ -43,7 +43,7 @@ const production: ConfigArgs = {
     PASSWORD: process.env.DB_PASSWORD,
   },
   APP: {
-    PORT: Number(process.env.APP_PORT) || 8080,
+    PORT: Number(process.env.APP_PORT),
   },
   JWT: {
     SECRET: process.env.JWT_SECRET,
@@ -95,7 +95,7 @@ let env = process.env.NODE_ENV as keyof Configuration;
 
 if (!configuration[env]) {
   console.warn(
-    `Unknown NODE_ENV value "${env}". Defaulting to 'fallback' configuration.`,
+    `Unknown NODE_ENV value "${env}". Defaulting to 'fallback' configuration.`
   );
   env = "development";
 }
