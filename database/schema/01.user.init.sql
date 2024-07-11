@@ -1,16 +1,14 @@
 CREATE TABLE IF NOT EXISTS public.user (
-	id VARCHAR(36) NOT NULL PRIMARY KEY,
+	id VARCHAR(36) PRIMARY KEY,
 	email VARCHAR(30) NOT NULL,
 	username VARCHAR(30) NOT NULL,
-	password VARCHAR(50) NOT NULL
+	password VARCHAR(50) 
 );
 
 CREATE TABLE IF NOT EXISTS federated_credentials (
-	id VARCHAR(36) PRIMARY KEY,
+	id serial PRIMARY KEY,
 	user_id VARCHAR(36) NOT NULL,
-	provider TEXT NOT NULL,
-	subject TEXT NOT NULL,
-	UNIQUE (provider, subject)
+	provider TEXT NOT NULL
 );
 
 ALTER TABLE public.federated_credentials
