@@ -22,12 +22,15 @@ app.use(morgan("dev"));
 
 app.use(
   cors({
-    origin: true,
+    origin: ["https://dreamhacker.vercel.app"],
+    methods: ["POST", "GET", "PUT", "UPDATE"],
     credentials: true,
   }),
 );
 
 const pgStore = pgSession(session);
+
+app.set("trust proxy", 1);
 
 app.use(
   session({
@@ -35,7 +38,12 @@ app.use(
     saveUninitialized: false,
     resave: false,
     cookie: {
+      path: "/",
+      sameSite: "none",
+      secure: true,
+      domain: "https://dreamhacker.vercel.app",
       maxAge: 60000 * 60,
+      httpOnly: true,
     },
     store: new pgStore({
       pool: postgres,
