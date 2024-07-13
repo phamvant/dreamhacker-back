@@ -4,7 +4,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import cors from "cors";
 // import csrf from "csurf";
-
+import sslRootCAs from "ssl-root-cas";
 import publicApp from "./public.js";
 import adminApp from "./admin.js";
 import authRoute from "./router/auth/index.js";
@@ -15,6 +15,7 @@ import postgres from "./db/db.js";
 import { ErrorResponse, NotFoundError } from "./utils/error.response.js";
 import { StatusCode } from "./utils/http.response/code.status.js";
 
+sslRootCAs.inject();
 const app = express();
 
 app.use(helmet());
@@ -22,15 +23,17 @@ app.use(morgan("dev"));
 
 app.use(
   cors({
-    origin: ["https://dreamhacker.vercel.app"],
-    methods: ["POST", "GET", "PUT", "UPDATE"],
+    origin:
+      CONFIG.ENV === "production" ? ["https://app.dreamhacker.online"] : true,
+    methods:
+      CONFIG.ENV === "production" ? ["POST", "GET", "PUT", "UPDATE"] : null,
     credentials: true,
-  })
+  }),
 );
 
 const pgStore = pgSession(session);
 
-// app.set("trust proxy", 1);
+app.set("trust proxy", 1);
 
 app.use(
   session({
@@ -39,15 +42,16 @@ app.use(
     resave: false,
     cookie: {
       path: "/",
-      sameSite: "none",
-      secure: true,
-      maxAge: 60000 * 60,
+      domain: "dreamhacker.online",
+      sameSite: CONFIG.ENV === "production" ? "none" : "lax",
+      secure: CONFIG.ENV === "production" ? true : false,
+      maxAge: 60000 * 60 * 24,
       httpOnly: true,
     },
     store: new pgStore({
       pool: postgres,
     }),
-  })
+  }),
 );
 
 // app.use(csrf());
@@ -76,7 +80,7 @@ app.use(
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const error = new NotFoundError({ message: "Not found" });
     next(error);
-  }
+  },
 );
 
 app.use(
@@ -84,14 +88,14 @@ app.use(
     error: ErrorResponse,
     req: express.Request,
     res: express.Response,
-    next: express.NextFunction
+    next: express.NextFunction,
   ) => {
     console.log(error);
     res
       .status(error.statusCode || StatusCode.INTERNAL_SERVER_ERROR)
       .json({ status: "error", message: error.message })
       .send();
-  }
+  },
 );
 
 const server = app.listen(CONFIG.APP.PORT, () => {

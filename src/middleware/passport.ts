@@ -9,7 +9,7 @@ passport.use(
     {
       clientID: CONFIG.AUTH0.GOOGLE.CLIENT_ID,
       clientSecret: CONFIG.AUTH0.GOOGLE.CLIENT_SECRET,
-      callbackURL: "/auth/google/callback",
+      callbackURL: "https://dreamhacker.online/auth/google/callback",
     },
 
     async function (accessToken, refreshToken, profile, done) {
