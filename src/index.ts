@@ -42,7 +42,7 @@ app.use(
     resave: false,
     cookie: {
       path: "/",
-      domain: "dreamhacker.online",
+      domain: CONFIG.ENV === "production" ? "dreamhacker.online" : "localhost",
       sameSite: CONFIG.ENV === "production" ? "none" : "lax",
       secure: CONFIG.ENV === "production" ? true : false,
       maxAge: 60000 * 60 * 24,

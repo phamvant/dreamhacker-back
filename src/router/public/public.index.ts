@@ -1,8 +1,6 @@
-import { Response, Router } from "express";
+import { Router } from "express";
 import accessRoute from "./user/public.user.route.js";
 import postRoute from "./post/post.route.js";
-import { SUCCESS } from "../../utils/success.response.js";
-import { asyncHandler } from "../../utils/async.handler.js";
 
 const publicIndexRouteV1 = Router();
 

@@ -9,7 +9,7 @@ passport.use(
     {
       clientID: CONFIG.AUTH0.GOOGLE.CLIENT_ID,
       clientSecret: CONFIG.AUTH0.GOOGLE.CLIENT_SECRET,
-      callbackURL: "https://dreamhacker.online/auth/google/callback",
+      callbackURL: `${CONFIG.ENV === "production" ? "https://dreamhacker.online" : ""}/auth/google/callback`,
     },
 
     async function (accessToken, refreshToken, profile, done) {
@@ -19,7 +19,6 @@ passport.use(
           ["https://www.facebook.com", profile.id],
         );
 
-        // console.log(profile);
         if (!existedUser.rowCount) {
           const newUser = await postgres.query(
             "INSERT INTO public.user (id, email, username) VALUES ($1, $2, $3)",

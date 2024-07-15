@@ -22,7 +22,7 @@ export class SUCCESS {
 }
 
 export class CREATE extends SUCCESS {
-  constructor({ metadata = undefined }) {
+  constructor({ metadata = undefined } = {}) {
     super({ metadata });
     this.code = StatusCode.CREATED;
   }
