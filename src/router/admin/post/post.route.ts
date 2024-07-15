@@ -2,7 +2,15 @@ import { Router } from "express";
 import { checkRole } from "../../../middleware/auth.js";
 import { asyncHandler } from "../../../utils/async.handler.js";
 import { createPostController } from "../../../controller/admin/post.controller.js";
+import { createPostSchema } from "../../../schema/schema.post.js";
 
-const router = Router();
+const postRoute = Router();
 
-router.post("/create", checkRole("ADMIN"), asyncHandler(createPostController));
+postRoute.post(
+  "/create",
+  checkRole("ADMIN"),
+  createPostSchema,
+  asyncHandler(createPostController)
+);
+
+export default postRoute;

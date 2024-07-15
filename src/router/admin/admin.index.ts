@@ -1,12 +1,11 @@
 import { Router } from "express";
-import accessRoute from "./user/admin.user.route.js";
+import accessRoute from "./user/user.route.js";
+import postRoute from "./post/post.route.js";
 
 const adminIndexRoute = Router();
 
-adminIndexRoute.get("/", async (req, res, next) => {
-  res.status(200).json({ Hello: "Admin" });
-});
-
 adminIndexRoute.use("/", accessRoute);
+
+adminIndexRoute.use("/post", postRoute);
 
 export default adminIndexRoute;

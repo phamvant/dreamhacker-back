@@ -25,8 +25,6 @@ app.use(
   cors({
     origin:
       CONFIG.ENV === "production" ? ["https://app.dreamhacker.online"] : true,
-    methods:
-      CONFIG.ENV === "production" ? ["POST", "GET", "PUT", "UPDATE"] : null,
     credentials: true,
   })
 );
