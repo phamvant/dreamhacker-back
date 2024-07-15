@@ -20,3 +20,18 @@ export const getDbRoleById = async (userId: string) => {
 
   return role.rows[0];
 };
+
+export const getDbUserAvatarById = async (userId: string) => {
+  const avatar = await postgres.query(
+    `
+    SELECT avatar from public.user WHERE id=$1
+    `,
+    [userId]
+  );
+
+  if (!avatar.rowCount) {
+    return false;
+  }
+
+  return avatar.rows[0];
+};

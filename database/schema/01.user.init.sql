@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS public.user (
 	id VARCHAR(36) PRIMARY KEY,
 	email VARCHAR(30) NOT NULL,
 	username VARCHAR(30) NOT NULL,
+    avatar TEXT,
 	password VARCHAR(50),
 	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -14,7 +15,7 @@ CREATE TABLE IF NOT EXISTS federated_credentials (
 );
 
 CREATE TABLE role (
-    id SERIAL PRIMARY KEY,
+    id INTEGER PRIMARY KEY,
     role_name VARCHAR(255) UNIQUE NOT NULL
 );
 
@@ -55,21 +56,14 @@ ON DELETE CASCADE;
 ALTER TABLE public.federated_credentials
 ADD CONSTRAINT "user_credential_fk" FOREIGN KEY (user_id) REFERENCES public.user(id);
 
-INSERT INTO role (role_name) VALUES ('ADMIN'), ('MODDER'), ('USER');
+INSERT INTO role (id, role_name) VALUES (1, 'ADMIN'), (2, 'MODDER'), (3, 'USER');
 
-INSERT INTO "public"."user" ("id", "email", "username", "password") VALUES
-('108543290814069582461', 'thuan@gmail.com', 'Thuận Phạm', NULL);
+INSERT INTO "public"."user" ("id", "email", "username", "password", "avatar") VALUES
+('108543290814069582461', 'pham.t.286.01@gmail.com', 'Thuận Phạm', NULL, 'https://lh3.googleusercontent.com/a/ACg8ocJv_b-X7zzY0JwIAXBg0Y2VUI7AEbqIIp_LGtAeF8KyqMS5YPm4oA=s96-c');
 
-INSERT INTO "public"."federated_credentials" ("id", "user_id", "provider") VALUES
-(1, '108543290814069582461', 'https://www.facebook.com');
+INSERT INTO "public"."federated_credentials" ("user_id", "provider") VALUES
+('108543290814069582461', 'google');
 
 INSERT INTO user_roles (user_id, role_id)
 VALUES ((SELECT id FROM public.user WHERE id='108543290814069582461'),
         (SELECT id FROM public.role WHERE role_name='ADMIN'));
-
-INSERT INTO role_permissions (role_id, permission_id)
-VALUES
-((SELECT id FROM roles WHERE role_name = 'admin'), (SELECT id FROM permissions WHERE permission_name = 'CREATE')),
-((SELECT id FROM roles WHERE role_name = 'admin'), (SELECT id FROM permissions WHERE permission_name = 'VIEW')),
-((SELECT id FROM roles WHERE role_name = 'admin'), (SELECT id FROM permissions WHERE permission_name = 'EDIT')),
-((SELECT id FROM roles WHERE role_name = 'admin'), (SELECT id FROM permissions WHERE permission_name = '0004'));

@@ -7,7 +7,7 @@ import cors from "cors";
 import sslRootCAs from "ssl-root-cas";
 import publicApp from "./public.js";
 import adminApp from "./admin.js";
-import authRoute from "./router/auth/index.js";
+import authRoute from "./auth/routes/auth.route.js";
 import myPassport from "./middleware/passport.js";
 import session from "express-session";
 import pgSession from "connect-pg-simple";
@@ -28,7 +28,7 @@ app.use(
     methods:
       CONFIG.ENV === "production" ? ["POST", "GET", "PUT", "UPDATE"] : null,
     credentials: true,
-  }),
+  })
 );
 
 const pgStore = pgSession(session);
@@ -51,7 +51,7 @@ app.use(
     store: new pgStore({
       pool: postgres,
     }),
-  }),
+  })
 );
 
 // app.use(csrf());
@@ -80,7 +80,7 @@ app.use(
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const error = new NotFoundError({ message: "Not found" });
     next(error);
-  },
+  }
 );
 
 app.use(
@@ -88,14 +88,14 @@ app.use(
     error: ErrorResponse,
     req: express.Request,
     res: express.Response,
-    next: express.NextFunction,
+    next: express.NextFunction
   ) => {
     console.log(error);
     res
       .status(error.statusCode || StatusCode.INTERNAL_SERVER_ERROR)
       .json({ status: "error", message: error.message })
       .send();
-  },
+  }
 );
 
 const server = app.listen(CONFIG.APP.PORT, () => {
