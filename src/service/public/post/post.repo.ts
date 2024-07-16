@@ -1,4 +1,20 @@
+import { QueryResult } from "pg";
 import postgres from "../../../db/db.js";
+
+interface IPost {
+  id: number;
+  title: string;
+  content: string;
+  is_scrap: boolean;
+  category_id: number;
+  likes: number;
+  total_comments: number;
+  saved: number;
+  created_at: string;
+  authro_id: string;
+  username: string;
+  avatar: string;
+}
 
 export const getDbPostById = async (postId: number) => {
   const ret = await postgres.query(
@@ -13,7 +29,7 @@ export const getDbPostById = async (postId: number) => {
     return false;
   }
 
-  return ret;
+  return ret as QueryResult<IPost>;
 };
 
 export const getListPost = async (category: number, page: number) => {

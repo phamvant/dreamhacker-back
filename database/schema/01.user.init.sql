@@ -27,12 +27,10 @@ CREATE TABLE user_roles (
 );
 
 ALTER TABLE user_roles
-ADD CONSTRAINT "user_roles_user_fk" FOREIGN KEY (user_id) REFERENCES public.user(id)
-ON DELETE CASCADE;
+ADD CONSTRAINT "user_roles_user_fk" FOREIGN KEY (user_id) REFERENCES public.user(id);
 
 ALTER TABLE user_roles
-ADD CONSTRAINT "user_roles_role_fk" FOREIGN KEY (role_id) REFERENCES public.role(id)
-ON DELETE CASCADE;
+ADD CONSTRAINT "user_roles_role_fk" FOREIGN KEY (role_id) REFERENCES public.role(id);
 
 CREATE TABLE permission (
     id SERIAL PRIMARY KEY,
@@ -46,12 +44,10 @@ CREATE TABLE role_permissions (
 );
 
 ALTER TABLE role_permissions
-ADD CONSTRAINT "role_permissions_role" FOREIGN KEY (role_id) REFERENCES public.role(id)
-ON DELETE CASCADE;
+ADD CONSTRAINT "role_permissions_role" FOREIGN KEY (role_id) REFERENCES public.role(id);
 
 ALTER TABLE role_permissions
-ADD CONSTRAINT "role_permissions_permission" FOREIGN KEY (permission_id) REFERENCES public.permission(id)
-ON DELETE CASCADE;
+ADD CONSTRAINT "role_permissions_permission" FOREIGN KEY (permission_id) REFERENCES public.permission(id);
 
 ALTER TABLE public.federated_credentials
 ADD CONSTRAINT "user_credential_fk" FOREIGN KEY (user_id) REFERENCES public.user(id);
