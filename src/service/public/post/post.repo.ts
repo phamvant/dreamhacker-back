@@ -16,6 +16,8 @@ interface IPost {
   avatar: string;
 }
 
+const pageSize = 2;
+
 export const getDbPostById = async (postId: number) => {
   const ret = await postgres.query(
     `SELECT p.id, p.title, p.content, p.is_scrap, p.category_id, p.likes, p.total_comments, p.saved, p.created_at, p.author_id, u.username, u.avatar
@@ -33,8 +35,6 @@ export const getDbPostById = async (postId: number) => {
 };
 
 export const getListPost = async (category: number, page: number) => {
-  const pageSize = 10;
-
   const ret = await postgres.query(
     `SELECT p.id, p.title, p.content, p.is_scrap, p.category_id, p.likes, p.total_comments, p.saved, p.created_at, p.author_id, u.username, u.avatar
        FROM public.post p
@@ -51,4 +51,19 @@ export const getListPost = async (category: number, page: number) => {
   const posts = ret.rows;
 
   return posts;
+};
+
+export const getTotalPageOfCategory = async (category: number) => {
+  const ret = await postgres.query(
+    `
+    SELECT total_post FROM category WHERE id=$1
+    `,
+    [category]
+  );
+
+  if (!ret.rowCount) {
+    return false;
+  }
+
+  return (ret.rows[0].total_post / pageSize) as number;
 };
