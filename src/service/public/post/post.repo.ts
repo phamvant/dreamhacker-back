@@ -17,6 +17,25 @@ interface IPost {
 
 const pageSize = 10;
 
+export const getDBFeaturePost = async (numberOfPost: number) => {
+  const feature = await postgres.query(
+    `
+   SELECT p.id, p.title, p.content, p.is_scrap, p.category_id, p.likes, p.total_comments, p.saved, p.created_at, p.author_id, u.username, u.avatar
+       FROM public.post p
+       INNER JOIN public.user u ON p.author_id = u.id
+       ORDER BY p.clicked DESC
+       LIMIT $1
+    `,
+    [numberOfPost]
+  );
+
+  if (!feature.rowCount) {
+    return false;
+  }
+
+  return feature.rows;
+};
+
 export const getDbPostById = async (postId: number) => {
   let ret = await postgres.query(
     `SELECT p.id, p.title, p.content, p.is_scrap, p.category_id, p.likes, p.total_comments, p.saved, p.created_at, p.author_id, u.username, u.avatar

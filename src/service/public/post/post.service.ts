@@ -1,10 +1,10 @@
 import { NotFoundError } from "../../../utils/error.response.js";
 import {
+  getDBFeaturePost,
   getDbPostById,
   getListPost,
   getTotalPageOfCategory,
 } from "./post.repo.js";
-import { ServerBlockNoteEditor } from "@blocknote/server-util";
 
 export const getPostById = async (id: number) => {
   const post = await getDbPostById(id);
@@ -30,4 +30,14 @@ export const getListPostByCategory = async (category: number, page: number) => {
   }
 
   return { posts: listPost, totalPage: totalPage };
+};
+
+export const getFeaturePost = async (numberOfPost: number) => {
+  const featurePosts = await getDBFeaturePost(numberOfPost);
+
+  if (!featurePosts) {
+    throw new NotFoundError();
+  }
+
+  return featurePosts;
 };
