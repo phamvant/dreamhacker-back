@@ -1,4 +1,3 @@
-import { QueryResult } from "pg";
 import postgres from "../../../db/db.js";
 
 interface IPost {
@@ -16,10 +15,10 @@ interface IPost {
   avatar: string;
 }
 
-const pageSize = 2;
+const pageSize = 10;
 
 export const getDbPostById = async (postId: number) => {
-  const ret = await postgres.query(
+  let ret = await postgres.query(
     `SELECT p.id, p.title, p.content, p.is_scrap, p.category_id, p.likes, p.total_comments, p.saved, p.created_at, p.author_id, u.username, u.avatar
     FROM public.post p
     INNER JOIN public.user u ON p.author_id = u.id
@@ -31,7 +30,16 @@ export const getDbPostById = async (postId: number) => {
     return false;
   }
 
-  return ret as QueryResult<IPost>;
+  let clickCount = await postgres.query(
+    `UPDATE public.post
+    SET clicked = clicked + 1
+    WHERE id = $1`,
+    [postId]
+  );
+
+  console.log(clickCount);
+
+  return ret.rows[0] as IPost;
 };
 
 export const getListPost = async (category: number, page: number) => {
@@ -65,5 +73,5 @@ export const getTotalPageOfCategory = async (category: number) => {
     return false;
   }
 
-  return (ret.rows[0].total_post / pageSize) as number;
+  return (Math.round(ret.rows[0].total_post / pageSize) + 1) as number;
 };

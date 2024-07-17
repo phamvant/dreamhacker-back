@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.606.0",
+    "@blocknote/server-util": "^0.15.1",
     "connect-pg-simple": "^9.0.1",
     "cors": "^2.8.5",
     "csurf": "^1.11.0",

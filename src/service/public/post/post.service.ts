@@ -4,6 +4,7 @@ import {
   getListPost,
   getTotalPageOfCategory,
 } from "./post.repo.js";
+import { ServerBlockNoteEditor } from "@blocknote/server-util";
 
 export const getPostById = async (id: number) => {
   const post = await getDbPostById(id);
@@ -12,9 +13,11 @@ export const getPostById = async (id: number) => {
     throw new NotFoundError();
   }
 
-  if (!post.rows[0].is_scrap) {
-    return post.rows[0];
+  if (!post.is_scrap) {
+    return post;
   }
+
+  return post;
 };
 
 export const getListPostByCategory = async (category: number, page: number) => {
