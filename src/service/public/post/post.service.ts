@@ -1,9 +1,10 @@
 import { NotFoundError } from "../../../utils/error.response.js";
 import {
+  getAllCategoryInfoRepo,
+  getCategoryInfoById,
   getDBFeaturePost,
   getDbPostById,
   getListPost,
-  getTotalPageOfCategory,
 } from "./post.repo.js";
 
 export const getPostById = async (id: number) => {
@@ -23,13 +24,15 @@ export const getPostById = async (id: number) => {
 export const getListPostByCategory = async (category: number, page: number) => {
   const listPost = await getListPost(category, page);
 
-  const totalPage = await getTotalPageOfCategory(category);
+  const categoryInfo = await getCategoryInfoById(category);
 
-  if (!(totalPage && listPost)) {
+  if (!(categoryInfo && listPost)) {
     throw new NotFoundError();
   }
 
-  return { posts: listPost, totalPage: totalPage };
+  console.log(categoryInfo);
+
+  return { posts: listPost, categoryInfo: categoryInfo };
 };
 
 export const getFeaturePost = async (numberOfPost: number) => {
@@ -40,4 +43,14 @@ export const getFeaturePost = async (numberOfPost: number) => {
   }
 
   return featurePosts;
+};
+
+export const getAllCategoryInfo = async () => {
+  const allCategoryInfo = await getAllCategoryInfoRepo();
+
+  if (!allCategoryInfo) {
+    throw new NotFoundError();
+  }
+
+  return allCategoryInfo;
 };

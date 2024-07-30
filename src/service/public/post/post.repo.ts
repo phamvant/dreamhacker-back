@@ -65,7 +65,8 @@ export const getListPost = async (category: number, page: number) => {
   const ret = await postgres.query(
     `SELECT p.id, p.title, p.content, p.is_scrap, p.category_id, p.likes, p.total_comments, p.saved, p.created_at, p.author_id, u.username, u.avatar
        FROM public.post p
-       INNER JOIN public.user u ON p.author_id = u.id
+       INNER JOIN public.user u
+       ON p.author_id = u.id
        WHERE p.category_id = $1
        LIMIT $2 OFFSET $3`,
     [category, pageSize, pageSize * (page - 1)]
@@ -80,10 +81,14 @@ export const getListPost = async (category: number, page: number) => {
   return posts;
 };
 
-export const getTotalPageOfCategory = async (category: number) => {
+export const getCategoryInfoById = async (category: number) => {
   const ret = await postgres.query(
     `
-    SELECT total_post FROM category WHERE id=$1
+    SELECT c.total_post, c.name as category_name, p.name as program_name
+    FROM public.category c
+    INNER JOIN public.program p
+    ON c.program_id = p.id
+    WHERE c.id = $1
     `,
     [category]
   );
@@ -92,5 +97,41 @@ export const getTotalPageOfCategory = async (category: number) => {
     return false;
   }
 
-  return (Math.round(ret.rows[0].total_post / pageSize) + 1) as number;
+  const { total_post, category_name, program_name } = ret.rows[0];
+
+  return {
+    totalPage: Math.round(total_post / pageSize) as number,
+    categoryName: category_name,
+    programName: program_name,
+  };
+};
+
+export const getAllCategoryInfoRepo = async () => {
+  const ret = await postgres.query(
+    `
+    SELECT c.id as category_id, c.name as category_name, p.name as program_name
+    FROM public.category c
+    INNER JOIN public.program p
+    ON c.program_id = p.id
+    ORDER BY c.id;
+    `
+  );
+
+  if (!ret.rowCount) {
+    return false;
+  }
+
+  const clasify = ret.rows.reduce((acc, cur) => {
+    const { category_id, category_name, program_name } = cur;
+
+    if (!acc[program_name]) {
+      acc[program_name] = [];
+    }
+
+    acc[program_name].push({ name: category_name, id: category_id });
+
+    return acc;
+  }, {});
+
+  return clasify;
 };

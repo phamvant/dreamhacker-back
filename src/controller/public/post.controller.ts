@@ -12,10 +12,8 @@ export const getListPostController = async (
   res: Response,
   next: NextFunction
 ) => {
-  const categoryId = parseInt(req.query.category as string);
+  const categoryId = parseInt(req.query.id as string);
   const page = parseInt(req.query.page as string);
-
-  console.log(categoryId, page);
 
   if (!categoryId || !page) {
     throw new NotFoundError({ message: "Query not valid" });

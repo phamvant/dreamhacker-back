@@ -10,8 +10,6 @@ const router = Router();
 
 router.get("/feature", asyncHandler(getFeaturePostController));
 
-router.get("", asyncHandler(getListPostController));
-
 router.get("/:id", asyncHandler(getPostByIdController));
 
 export default router;
