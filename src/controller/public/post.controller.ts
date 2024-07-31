@@ -7,27 +7,6 @@ import {
   getPostById,
 } from "../../service/public/post/post.service.js";
 
-export const getListPostController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const categoryId = parseInt(req.query.id as string);
-  const page = parseInt(req.query.page as string);
-
-  if (!categoryId || !page) {
-    throw new NotFoundError({ message: "Query not valid" });
-  }
-
-  const ret = await getListPostByCategory(categoryId, page);
-
-  if (!ret) {
-    throw new NotFoundError({ message: "Not resource found" });
-  }
-
-  new SUCCESS({ metadata: ret }).send(res);
-};
-
 export const getPostByIdController = async (
   req: Request,
   res: Response,

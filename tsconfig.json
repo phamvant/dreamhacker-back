@@ -1,11 +1,11 @@
 {
   "compilerOptions": {
-    // "module": "ES2022", //design to work with package.json that have type: module
+    // "module": "NodeNext", //design to work with package.json that have type: module
     // "moduleResolution": "NodeNext",
     // "target": "ES2022",
-    "module": "esnext",
+    "module": "NodeNext",
     "target": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "NodeNext",
     "sourceMap": true, //map the compiled code back to the original code (JS) for debugging purposes
     "outDir": "dist",
     "esModuleInterop": true,

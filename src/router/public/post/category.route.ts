@@ -1,8 +1,9 @@
 import { Router } from "express";
-import { getListPostController } from "../../../controller/public/post.controller";
-import { asyncHandler } from "../../../utils/async.handler";
-import { getAllCategoryInfo } from "../../../service/public/post/post.service";
-import { getAllCategoryInfoController } from "../../../controller/public/category.controller";
+import {
+  getListPostController,
+  getAllCategoryInfoController,
+} from "../../../controller/public/category.controller.js";
+import { asyncHandler } from "../../../utils/async.handler.js";
 
 const router = Router();
 
