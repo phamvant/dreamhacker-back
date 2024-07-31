@@ -1,9 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import { NotFoundError } from "../../utils/error.response.js";
 import { SUCCESS } from "../../utils/success.response.js";
 import {
   getFeaturePost,
-  getListPostByCategory,
   getPostById,
 } from "../../service/public/post/post.service.js";
 

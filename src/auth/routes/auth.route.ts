@@ -12,8 +12,8 @@ router.get(
   "",
   checkRole(),
   asyncHandler(async (req, res, next) => {
-    const { role, avatar } = res.locals;
-    new SUCCESS({ metadata: { role: role, avatar: avatar } }).send(res);
+    const { role, avatar, id } = res.locals;
+    new SUCCESS({ metadata: { id: id, role: role, avatar: avatar } }).send(res);
   })
 );
 

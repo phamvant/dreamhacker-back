@@ -30,8 +30,6 @@ export const getListPostByCategory = async (category: number, page: number) => {
     throw new NotFoundError();
   }
 
-  console.log(categoryInfo);
-
   return { posts: listPost, categoryInfo: categoryInfo };
 };
 

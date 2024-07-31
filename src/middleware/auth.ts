@@ -20,6 +20,7 @@ export const checkRole = (role?: string) => {
       } else {
         res.locals.role = userRole;
         res.locals.avatar = avatar;
+        res.locals.id = id;
         return next();
       }
       throw new UnAuthorizedError();

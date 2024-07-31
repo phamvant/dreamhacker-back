@@ -68,6 +68,7 @@ export const getListPost = async (category: number, page: number) => {
        INNER JOIN public.user u
        ON p.author_id = u.id
        WHERE p.category_id = $1
+       ORDER BY created_at DESC
        LIMIT $2 OFFSET $3`,
     [category, pageSize, pageSize * (page - 1)]
   );
