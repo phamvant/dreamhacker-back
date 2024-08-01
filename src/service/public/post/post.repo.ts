@@ -136,3 +136,20 @@ export const getAllCategoryInfoRepo = async () => {
 
   return clasify;
 };
+
+export const modifyDbPost = async (postId, title, content) => {
+  const updatePost = await postgres.query(
+    `
+      UPDATE public.post (title, content)
+      VALUES ($1, $2)
+      WHERE id=$3;
+    `,
+    [title, content, postId]
+  );
+
+  if (!updatePost.rowCount) {
+    return false;
+  }
+
+  return true;
+};

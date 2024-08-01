@@ -3,6 +3,7 @@ import { SUCCESS } from "../../utils/success.response.js";
 import {
   getFeaturePost,
   getPostById,
+  modifyPost,
 } from "../../service/public/post/post.service.js";
 
 export const getPostByIdController = async (
@@ -27,4 +28,17 @@ export const getFeaturePostController = async (
   const posts = await getFeaturePost(numberOfPost);
 
   new SUCCESS({ metadata: posts }).send(res);
+};
+
+export const modifyPostController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const postId = req.params.id;
+  const { id } = req.user as { id: string };
+
+  const isModified = await modifyPost({ userId: id, postId: Number(postId) });
+
+  new SUCCESS({ metadata: isModified }).send(res);
 };
