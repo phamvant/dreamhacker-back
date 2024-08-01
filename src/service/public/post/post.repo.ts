@@ -10,7 +10,7 @@ interface IPost {
   total_comments: number;
   saved: number;
   created_at: string;
-  authro_id: string;
+  author_id: string;
   username: string;
   avatar: string;
 }
@@ -55,8 +55,6 @@ export const getDbPostById = async (postId: number) => {
     WHERE id = $1`,
     [postId]
   );
-
-  console.log(clickCount);
 
   return ret.rows[0] as IPost;
 };
@@ -135,4 +133,21 @@ export const getAllCategoryInfoRepo = async () => {
   }, {});
 
   return clasify;
+};
+
+export const modifyDbPost = async (postId, title, content) => {
+  const updatePost = await postgres.query(
+    `
+      UPDATE public.post 
+      SET title = $1, content = $2 
+      WHERE id = $3;
+    `,
+    [title, content, postId]
+  );
+
+  if (!updatePost.rowCount) {
+    return false;
+  }
+
+  return true;
 };

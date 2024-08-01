@@ -1,10 +1,14 @@
-import { NotFoundError } from "../../../utils/error.response.js";
+import {
+  NotFoundError,
+  UnAuthorizedError,
+} from "../../../utils/error.response.js";
 import {
   getAllCategoryInfoRepo,
   getCategoryInfoById,
   getDBFeaturePost,
   getDbPostById,
   getListPost,
+  modifyDbPost,
 } from "./post.repo.js";
 
 export const getPostById = async (id: number) => {
@@ -51,4 +55,34 @@ export const getAllCategoryInfo = async () => {
   }
 
   return allCategoryInfo;
+};
+
+export const modifyPost = async ({
+  userId,
+  postId,
+  title,
+  content,
+}: {
+  userId: string;
+  postId: number;
+  title: string;
+  content: string;
+}) => {
+  const post = await getDbPostById(postId);
+
+  if (!post) {
+    throw new NotFoundError();
+  }
+
+  if (post.author_id !== userId) {
+    throw new UnAuthorizedError();
+  }
+
+  const isModified = await modifyDbPost(postId, title, content);
+
+  if (!isModified) {
+    throw new Error("Cant modify");
+  }
+
+  return true;
 };
