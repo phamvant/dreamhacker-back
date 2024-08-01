@@ -15,6 +15,7 @@ export const checkRole = (role?: string) => {
 
       if (role) {
         if (req.isAuthenticated() && userRole === role) {
+          res.locals.role = userRole;
           return next();
         }
       } else {
@@ -23,6 +24,7 @@ export const checkRole = (role?: string) => {
         res.locals.id = id;
         return next();
       }
+      console.log("object");
       throw new UnAuthorizedError();
     }
   );

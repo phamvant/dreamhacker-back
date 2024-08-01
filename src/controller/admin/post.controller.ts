@@ -26,6 +26,7 @@ export const modifyPostController = async (
   const { content, title } = req.body;
 
   const isModified = await modifyPost({
+    role: res.locals.role,
     userId: id,
     postId: Number(postId),
     title: title,

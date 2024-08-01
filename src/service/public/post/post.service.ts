@@ -58,11 +58,13 @@ export const getAllCategoryInfo = async () => {
 };
 
 export const modifyPost = async ({
+  role,
   userId,
   postId,
   title,
   content,
 }: {
+  role: string;
   userId: string;
   postId: number;
   title: string;
@@ -74,8 +76,10 @@ export const modifyPost = async ({
     throw new NotFoundError();
   }
 
-  if (post.author_id !== userId) {
-    throw new UnAuthorizedError();
+  if (role !== "ADMIN") {
+    if (post.author_id !== userId) {
+      throw new UnAuthorizedError();
+    }
   }
 
   const isModified = await modifyDbPost(postId, title, content);
