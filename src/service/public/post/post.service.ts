@@ -26,8 +26,12 @@ export const getPostById = async (id: number) => {
   return post;
 };
 
-export const getListPostByCategory = async (category: number, page: number) => {
-  const listPost = await getDbListPost(category, page);
+export const getListPostByCategory = async (
+  category: number,
+  page: number,
+  userId?: string
+) => {
+  const listPost = await getDbListPost(category, page, userId);
 
   const categoryInfo = await getCategoryInfoById(category);
 

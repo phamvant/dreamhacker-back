@@ -21,6 +21,12 @@ export const getListPostController = async (
   res: Response,
   next: NextFunction
 ) => {
+  let userId;
+
+  if (req.user && "id" in req.user) {
+    userId = req.user.id;
+  }
+
   const categoryId = parseInt(req.query.id as string);
   const page = parseInt(req.query.page as string);
 
@@ -28,7 +34,7 @@ export const getListPostController = async (
     throw new NotFoundError({ message: "Query not valid" });
   }
 
-  const ret = await getListPostByCategory(categoryId, page);
+  const ret = await getListPostByCategory(categoryId, page, userId);
 
   if (!ret) {
     throw new NotFoundError({ message: "Not resource found" });

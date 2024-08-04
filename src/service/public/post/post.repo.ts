@@ -83,7 +83,11 @@ export const getDbPostById = async (postId: number) => {
   return ret.rows[0] as IPost;
 };
 
-export const getDbListPost = async (category: number, page: number) => {
+export const getDbListPost = async (
+  category: number,
+  page: number,
+  userId?: string
+) => {
   const ret = await postgres.query(
     `SELECT 
       p.id, 
@@ -96,19 +100,19 @@ export const getDbListPost = async (category: number, page: number) => {
       p.created_at, 
       p.author_id, 
       u.username, 
+      l.user_id as is_liked,
       u.avatar
     FROM public.post p
     INNER JOIN public.user u ON p.author_id = u.id
     INNER JOIN public.post_universal pu ON p.id = pu.post_id
+    LEFT JOIN public.like l ON p.id = l.post_id AND l.user_id = $4
     WHERE p.category_id = $1
     AND pu.lang = 'vn'
     ORDER BY p.created_at DESC
     LIMIT $2 
     OFFSET $3`,
-    [category, pageSize, pageSize * (page - 1)]
+    [category, pageSize, pageSize * (page - 1), userId || null]
   );
-
-  console.log(ret);
 
   if (!ret.rowCount) {
     return false;
@@ -119,7 +123,10 @@ export const getDbListPost = async (category: number, page: number) => {
   return posts;
 };
 
-export const getCategoryInfoById = async (category: number) => {
+export const getCategoryInfoById = async (
+  category: number,
+  userId?: string
+) => {
   const ret = await postgres.query(
     `
     SELECT c.total_post, c.name as category_name, p.name as program_name
@@ -205,4 +212,47 @@ export const getDbPostInfo = async (postId: number) => {
     return false;
   }
   return ret.rows[0] as IPost;
+};
+
+export const updateDbPostVote = async (
+  votes: number,
+  postId: number,
+  userId: string
+) => {
+  try {
+    await postgres.query("BEGIN");
+    let updateLikeCount = await postgres.query(
+      `UPDATE post
+       SET likes = likes + $1
+       WHERE id = $2;
+      `,
+      [votes, postId]
+    );
+
+    if (votes < 0) {
+      let updateLikeRecord = await postgres.query(
+        `
+        DELETE FROM public.like
+        WHERE user_id = $1 AND post_id = $2;
+        `,
+        [userId, postId]
+      );
+    } else {
+      let updateLikeRecord = await postgres.query(
+        `
+        INSERT INTO public.like (user_id, post_id)
+        VALUES ($1, $2);
+        `,
+        [userId, postId]
+      );
+    }
+
+    await postgres.query("COMMIT");
+  } catch (e) {
+    await postgres.query("ROLLBACK");
+    console.log(e);
+    return false;
+  }
+
+  return true;
 };
