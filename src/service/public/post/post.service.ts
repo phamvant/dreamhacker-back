@@ -6,8 +6,9 @@ import {
   getAllCategoryInfoRepo,
   getCategoryInfoById,
   getDBFeaturePost,
+  getDbListPost,
   getDbPostById,
-  getListPost,
+  getDbPostInfo,
   modifyDbPost,
 } from "./post.repo.js";
 
@@ -26,7 +27,7 @@ export const getPostById = async (id: number) => {
 };
 
 export const getListPostByCategory = async (category: number, page: number) => {
-  const listPost = await getListPost(category, page);
+  const listPost = await getDbListPost(category, page);
 
   const categoryInfo = await getCategoryInfoById(category);
 
@@ -63,14 +64,16 @@ export const modifyPost = async ({
   postId,
   title,
   content,
+  lang,
 }: {
   role: string;
   userId: string;
   postId: number;
   title: string;
   content: string;
+  lang: string;
 }) => {
-  const post = await getDbPostById(postId);
+  const post = await getDbPostInfo(postId);
 
   if (!post) {
     throw new NotFoundError();
@@ -82,11 +85,17 @@ export const modifyPost = async ({
     }
   }
 
-  const isModified = await modifyDbPost(postId, title, content);
+  const isModified = await modifyDbPost(postId, title, content, lang);
 
   if (!isModified) {
     throw new Error("Cant modify");
   }
 
   return true;
+};
+
+export const getBasicPostInfo = async (postId: number) => {
+  const post = await getDbPostInfo(postId);
+
+  return post;
 };

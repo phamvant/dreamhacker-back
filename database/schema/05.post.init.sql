@@ -1,8 +1,5 @@
 CREATE TABLE IF NOT EXISTS public.post (
 	id serial PRIMARY KEY,
-	title TEXT NOT NULL,
-	content TEXT,
-	is_scrap BOOLEAN DEFAULT TRUE,
 	category_id INTEGER,
 	is_published BOOLEAN DEFAULT FALSE,
 	author_id VARCHAR(36),
@@ -42,34 +39,34 @@ CREATE TRIGGER decrement_post_count_trigger
 AFTER DELETE ON post
 FOR EACH ROW EXECUTE FUNCTION decrement_post_count();
 
-INSERT INTO "public"."post" ("id", "title", "content", "is_scrap", "category_id", "is_published", "author_id", "likes", "total_comments", "saved", "created_at") VALUES
-(1, 'Grade Calculator : Calculate your grade in any class without the legwork', '# Grade Calculator : Calculate your grade in any class without the legwork
+-- INSERT INTO "public"."post" ("id", "title", "content", "is_scrap", "category_id", "is_published", "author_id", "likes", "total_comments", "saved", "created_at") VALUES
+-- (1, 'Grade Calculator : Calculate your grade in any class without the legwork', '# Grade Calculator : Calculate your grade in any class without the legwork
 
-💡 **Notion Tip:** Calculate your grade in any class without the legwork.
+-- 💡 **Notion Tip:** Calculate your grade in any class without the legwork.
 
-*   Your `Raw Score` is the grade you got without a late penalty.
-*   The `Final Grade` calculates your late penalty. You can hide the late penalty column after you make sure the amount is correct.
-*   If your late assignment was excused, check off the `Excused` property and your late penalty will be ignored.
-*   The sum of grades beneath the `Weighted Grade` column is your grade in the class.
-*   How the template works 🔎 **Days Late** This formula calculates the number of days between the due date and submission. In case of excused tardiness, correct the submission date or delete the formula and turn this column into a simple number.
+-- *   Your `Raw Score` is the grade you got without a late penalty.
+-- *   The `Final Grade` calculates your late penalty. You can hide the late penalty column after you make sure the amount is correct.
+-- *   If your late assignment was excused, check off the `Excused` property and your late penalty will be ignored.
+-- *   The sum of grades beneath the `Weighted Grade` column is your grade in the class.
+-- *   How the template works 🔎 **Days Late** This formula calculates the number of days between the due date and submission. In case of excused tardiness, correct the submission date or delete the formula and turn this column into a simple number.
 
-`dateBetween(prop("Due"), prop("Submitted"), "days") * -1`
+-- `dateBetween(prop("Due"), prop("Submitted"), "days") * -1`
 
-## **Final Grade**
+-- ## **Final Grade**
 
-This formula takes late policies into consideration. It also accounts for any tardiness that''s been excused.
+-- This formula takes late policies into consideration. It also accounts for any tardiness that''s been excused.
 
-`prop("Grade") - prop("Days Late") * prop("Late Penalty") * 100 * toNumber(not prop("Excused"))`
+-- `prop("Grade") - prop("Days Late") * prop("Late Penalty") * 100 * toNumber(not prop("Excused"))`
 
-## **Class Grade**
+-- ## **Class Grade**
 
-This formula calculates points per assignment. The sum is your grade in the class.
+-- This formula calculates points per assignment. The sum is your grade in the class.
 
-`prop("Final Grade") * prop("Weighting")`
+-- `prop("Final Grade") * prop("Weighting")`
 
-**Note**: If you modify any of the table''s properties, you''ll need to adjust the above formulas accordingly.
+-- **Note**: If you modify any of the table''s properties, you''ll need to adjust the above formulas accordingly.
 
-↓ Click the button to add a new table for another course
+-- ↓ Click the button to add a new table for another course
 
-[English 001](https://www.notion.so/7276349daaf34797953fee4a0f7c1965?pvs=21)
-', 'f', 1, 't', '108543290814069582461', 0, 0, 0, '2024-07-13 17:02:36.514984');
+-- [English 001](https://www.notion.so/7276349daaf34797953fee4a0f7c1965?pvs=21)
+-- ', 'f', 1, 't', '108543290814069582461', 0, 0, 0, '2024-07-13 17:02:36.514984');

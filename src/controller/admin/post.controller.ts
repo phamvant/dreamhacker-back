@@ -23,7 +23,7 @@ export const modifyPostController = async (
 ) => {
   const postId = req.params.id;
   const { id } = req.user as { id: string };
-  const { content, title } = req.body;
+  const { content, title, lang } = req.body;
 
   const isModified = await modifyPost({
     role: res.locals.role,
@@ -31,6 +31,7 @@ export const modifyPostController = async (
     postId: Number(postId),
     title: title,
     content: content,
+    lang: lang,
   });
 
   new SUCCESS({ metadata: isModified }).send(res);

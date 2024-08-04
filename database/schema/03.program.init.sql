@@ -4,3 +4,5 @@ CREATE TABLE IF NOT EXISTS program (
 );
 
 INSERT INTO public.program (name) VALUES ('MBA');
+INSERT INTO public.program (name) VALUES ('Master');
+INSERT INTO public.program (name) VALUES ('PhD');

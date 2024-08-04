@@ -20,9 +20,11 @@ const pageSize = 10;
 export const getDBFeaturePost = async (numberOfPost: number) => {
   const feature = await postgres.query(
     `
-   SELECT p.id, p.title, p.content, p.is_scrap, p.category_id, p.likes, p.total_comments, p.saved, p.created_at, p.author_id, u.username, u.avatar
+   SELECT p.id, pu.title, pu.content, p.category_id, p.likes, p.total_comments, p.saved, p.created_at, p.author_id, u.username, u.avatar
        FROM public.post p
        INNER JOIN public.user u ON p.author_id = u.id
+       INNER JOIN public.post_universal pu ON p.id = pu.post_id
+       WHERE lang='vn'
        ORDER BY p.clicked DESC
        LIMIT $1
     `,
@@ -38,10 +40,32 @@ export const getDBFeaturePost = async (numberOfPost: number) => {
 
 export const getDbPostById = async (postId: number) => {
   let ret = await postgres.query(
-    `SELECT p.id, p.title, p.content, p.is_scrap, p.category_id, p.likes, p.total_comments, p.saved, p.created_at, p.author_id, u.username, u.avatar
-    FROM public.post p
-    INNER JOIN public.user u ON p.author_id = u.id
-    WHERE p.id = $1`,
+    `SELECT 
+      p.id, 
+      p.category_id, 
+      p.likes, 
+      p.total_comments, 
+      p.saved, 
+      p.created_at, 
+      p.author_id, 
+      u.username, 
+      u.avatar,
+      MAX(CASE WHEN pu.lang = 'vn' THEN pu.title ELSE NULL END) AS title_vn,
+      MAX(CASE WHEN pu.lang = 'en' THEN pu.title ELSE NULL END) AS title_en,
+      MAX(CASE WHEN pu.lang = 'cn' THEN pu.title ELSE NULL END) AS title_cn,
+      MAX(CASE WHEN pu.lang = 'vn' THEN pu.content ELSE NULL END) AS content_vn,
+      MAX(CASE WHEN pu.lang = 'en' THEN pu.content ELSE NULL END) AS content_en,
+      MAX(CASE WHEN pu.lang = 'cn' THEN pu.content ELSE NULL END) AS content_cn
+    FROM 
+      public.post p
+    INNER JOIN 
+      public.user u ON p.author_id = u.id
+    INNER JOIN 
+      public.post_universal pu ON p.id = pu.post_id
+    WHERE 
+      p.id = $1
+    GROUP BY 
+      p.id, p.category_id, p.likes, p.total_comments, p.saved, p.created_at, p.author_id, u.username, u.avatar`,
     [postId]
   );
 
@@ -59,17 +83,32 @@ export const getDbPostById = async (postId: number) => {
   return ret.rows[0] as IPost;
 };
 
-export const getListPost = async (category: number, page: number) => {
+export const getDbListPost = async (category: number, page: number) => {
   const ret = await postgres.query(
-    `SELECT p.id, p.title, p.content, p.is_scrap, p.category_id, p.likes, p.total_comments, p.saved, p.created_at, p.author_id, u.username, u.avatar
-       FROM public.post p
-       INNER JOIN public.user u
-       ON p.author_id = u.id
-       WHERE p.category_id = $1
-       ORDER BY created_at DESC
-       LIMIT $2 OFFSET $3`,
+    `SELECT 
+      p.id, 
+      pu.title, 
+      LEFT(pu.content, 150) AS content,
+      p.category_id, 
+      p.likes, 
+      p.total_comments, 
+      p.saved, 
+      p.created_at, 
+      p.author_id, 
+      u.username, 
+      u.avatar
+    FROM public.post p
+    INNER JOIN public.user u ON p.author_id = u.id
+    INNER JOIN public.post_universal pu ON p.id = pu.post_id
+    WHERE p.category_id = $1
+    AND pu.lang = 'vn'
+    ORDER BY p.created_at DESC
+    LIMIT $2 
+    OFFSET $3`,
     [category, pageSize, pageSize * (page - 1)]
   );
+
+  console.log(ret);
 
   if (!ret.rowCount) {
     return false;
@@ -135,14 +174,15 @@ export const getAllCategoryInfoRepo = async () => {
   return clasify;
 };
 
-export const modifyDbPost = async (postId, title, content) => {
+export const modifyDbPost = async (postId, title, content, lang) => {
   const updatePost = await postgres.query(
     `
-      UPDATE public.post 
-      SET title = $1, content = $2 
-      WHERE id = $3;
+      UPDATE public.post_universal 
+      SET title=$1, content=$2 
+      WHERE post_id=$3
+      AND lang=$4;
     `,
-    [title, content, postId]
+    [title, content, postId, lang]
   );
 
   if (!updatePost.rowCount) {
@@ -150,4 +190,19 @@ export const modifyDbPost = async (postId, title, content) => {
   }
 
   return true;
+};
+
+export const getDbPostInfo = async (postId: number) => {
+  let ret = await postgres.query(
+    `SELECT p.id, p.category_id, p.likes, p.total_comments, p.saved, p.created_at, p.author_id, u.username, u.avatar
+    FROM public.post p
+    INNER JOIN public.user u ON p.author_id = u.id
+    WHERE p.id = $1`,
+    [postId]
+  );
+
+  if (!ret.rowCount) {
+    return false;
+  }
+  return ret.rows[0] as IPost;
 };

@@ -28,7 +28,7 @@ export class ForbiddenError extends ErrorResponse {
 }
 
 export class BadRequestError extends ErrorResponse {
-  constructor({ statusCode = StatusCode.BAD_REQUEST, message = "sd" } = {}) {
+  constructor({ statusCode = StatusCode.BAD_REQUEST, message = "" } = {}) {
     super({ statusCode, message });
   }
 }

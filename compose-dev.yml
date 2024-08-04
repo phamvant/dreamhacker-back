@@ -17,6 +17,12 @@ services:
       - ./database/schema/03.program.init.sql:/docker-entrypoint-initdb.d/003.program.init.sql
       - ./database/schema/04.category.init.sql:/docker-entrypoint-initdb.d/004.category.init.sql
       - ./database/schema/05.post.init.sql:/docker-entrypoint-initdb.d/005.post.init.sql
+      - ./database/schema/06.post_universal.init.sql:/docker-entrypoint-initdb.d/006.post_universal.init.sql
+      - ./database/schema/07.comment.init.sql:/docker-entrypoint-initdb.d/007.comment.init.sql
+
+      # - ./database/schema/mock/post.sql:/docker-entrypoint-initdb.d/post.sql
+      # - ./database/schema/mock/post_universal.sql:/docker-entrypoint-initdb.d/post_universal.sql
+
       - ./database/trigger/01.update_total_post.sql:/docker-entrypoint-initdb.d/006.update_total_post.sql
 
     networks:
