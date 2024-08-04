@@ -42,7 +42,6 @@ export const commentDbPost = async ({
 
     return true;
   } catch (err) {
-    console.log(err);
     return false;
   }
 };
