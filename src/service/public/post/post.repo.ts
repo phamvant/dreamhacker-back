@@ -115,8 +115,6 @@ export const getDbListPost = async (
     [category, pageSize, pageSize * (page - 1), userId || null]
   );
 
-  console.log(ret);
-
   if (!ret.rowCount) {
     return false;
   }
