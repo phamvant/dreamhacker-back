@@ -1,7 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import { savePost } from "../../service/admin/post/post.repo.js";
 import { CREATE, SUCCESS } from "../../utils/success.response.js";
-import { modifyPost } from "../../service/public/post/post.service.js";
+import {
+  modifyPost,
+  togglePostEdited,
+} from "../../service/public/post/post.service.js";
+import { getPostByIdAdmin } from "../../service/admin/post/post.service.js";
 
 export const createPostController = async (
   req: Request,
@@ -35,4 +39,29 @@ export const modifyPostController = async (
   });
 
   new SUCCESS({ metadata: isModified }).send(res);
+};
+
+export const togglePostEditedController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const postId = req.params.id;
+  const { id } = req.user as { id: string };
+
+  const isToggled = togglePostEdited(Number(postId));
+
+  new SUCCESS({ metadata: isToggled }).send(res);
+};
+
+export const getPostByIdControllerAdmin = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const id = req.params.id;
+
+  const post = await getPostByIdAdmin(Number(id));
+
+  new SUCCESS({ metadata: post }).send(res);
 };

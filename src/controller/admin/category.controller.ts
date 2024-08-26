@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { SUCCESS } from "../../utils/success.response.js";
-import { getListPostByCategoryAdmin } from "../../service/public/post/post.service.js";
 import { NotFoundError } from "../../utils/error.response.js";
+import { getListPostByCategoryAdmin } from "../../service/admin/post/post.service.js";
 
 export const getListPostAdminController = async (
   req: Request,

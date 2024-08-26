@@ -1,4 +1,5 @@
 import {
+  BadRequestError,
   NotFoundError,
   UnAuthorizedError,
 } from "../../../utils/error.response.js";
@@ -7,10 +8,10 @@ import {
   getCategoryInfoById,
   getDBFeaturePost,
   getDbListPost,
-  getDbListPostAdmin,
   getDbPostById,
   getDbPostInfo,
   modifyDbPost,
+  togglePostDbEdited,
 } from "./post.repo.js";
 
 export const getPostById = async (id: number) => {
@@ -33,22 +34,6 @@ export const getListPostByCategory = async (
   userId?: string
 ) => {
   const listPost = await getDbListPost(category, page, userId);
-
-  const categoryInfo = await getCategoryInfoById(category);
-
-  if (!(categoryInfo && listPost)) {
-    throw new NotFoundError();
-  }
-
-  return { posts: listPost, categoryInfo: categoryInfo };
-};
-
-export const getListPostByCategoryAdmin = async (
-  category: number,
-  page: number,
-  userId?: string
-) => {
-  const listPost = await getDbListPostAdmin(category, page, userId);
 
   const categoryInfo = await getCategoryInfoById(category);
 
@@ -117,6 +102,16 @@ export const modifyPost = async ({
 
 export const getBasicPostInfo = async (postId: number) => {
   const post = await getDbPostInfo(postId);
+
+  return post;
+};
+
+export const togglePostEdited = async (postId: number) => {
+  const post = await togglePostDbEdited(postId);
+
+  if (!post) {
+    throw new BadRequestError();
+  }
 
   return post;
 };
