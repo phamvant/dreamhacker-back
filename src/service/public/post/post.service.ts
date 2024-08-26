@@ -8,6 +8,7 @@ import {
   getCategoryInfoById,
   getDBFeaturePost,
   getDbListPost,
+  getDbListPostAdmin,
   getDbPostById,
   getDbPostInfo,
   modifyDbPost,
@@ -34,6 +35,22 @@ export const getListPostByCategory = async (
   userId?: string
 ) => {
   const listPost = await getDbListPost(category, page, userId);
+
+  const categoryInfo = await getCategoryInfoById(category);
+
+  if (!(categoryInfo && listPost)) {
+    throw new NotFoundError();
+  }
+
+  return { posts: listPost, categoryInfo: categoryInfo };
+};
+
+export const getListPostByCategoryAdmin = async (
+  category: number,
+  page: number,
+  userId?: string
+) => {
+  const listPost = await getDbListPostAdmin(category, page, userId);
 
   const categoryInfo = await getCategoryInfoById(category);
 
