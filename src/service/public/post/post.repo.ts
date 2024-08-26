@@ -123,6 +123,47 @@ export const getDbListPost = async (
   return posts;
 };
 
+export const getDbListPostAdmin = async (
+  category: number,
+  page: number,
+  userId?: string
+) => {
+  const ret = await postgres.query(
+    `SELECT 
+      p.id, 
+      pu.title, 
+      LEFT(pu.content, 150) AS content,
+      p.category_id, 
+      p.likes, 
+      p.total_comments, 
+      p.saved, 
+      p.created_at, 
+      p.author_id, 
+      p.is_edited,
+      u.username, 
+      l.user_id as is_liked,
+      u.avatar
+    FROM public.post p
+    INNER JOIN public.user u ON p.author_id = u.id
+    INNER JOIN public.post_universal pu ON p.id = pu.post_id
+    LEFT JOIN public.like l ON p.id = l.post_id AND l.user_id = $4
+    WHERE p.category_id = $1
+    AND pu.lang = 'vn'
+    ORDER BY p.created_at DESC
+    LIMIT $2 
+    OFFSET $3`,
+    [category, pageSize, pageSize * (page - 1), userId || null]
+  );
+
+  if (!ret.rowCount) {
+    return false;
+  }
+
+  const posts = ret.rows;
+
+  return posts;
+};
+
 export const getCategoryInfoById = async (
   category: number,
   userId?: string

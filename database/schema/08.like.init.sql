@@ -1,4 +1,4 @@
-CREATE TABLE like (
+CREATE TABLE IF NOT EXISTS public.like (
     id SERIAL PRIMARY KEY,
     user_id VARCHAR(36) NOT NULL,
     post_id INT NOT NULL,
